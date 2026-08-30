@@ -11,21 +11,40 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<main class="app">
-  <h1 class="title">Dice Roller</h1>
-
-  <section class="control-row">
-    <span class="control-label">Dice</span>
-    <div class="count-stepper" role="group" aria-label="Number of dice">
-      <button class="count-btn" id="count-down" aria-label="Fewer dice">&minus;</button>
-      <span class="count-value" id="count-value">2</span>
-      <button class="count-btn" id="count-up" aria-label="More dice">&plus;</button>
-    </div>
-  </section>
+<main class="app" id="app">
+  <header class="header">
+    <h1 class="title">Dice Roller</h1>
+    <button class="icon-btn" id="settings-toggle" aria-label="Open dice settings" aria-expanded="false">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+        <rect x="8" y="8" width="84" height="84" rx="18" fill="none" stroke="currentColor" stroke-width="8"/>
+        <circle cx="32" cy="32" r="7" fill="currentColor"/>
+        <circle cx="68" cy="32" r="7" fill="currentColor"/>
+        <circle cx="50" cy="50" r="7" fill="currentColor"/>
+        <circle cx="32" cy="68" r="7" fill="currentColor"/>
+        <circle cx="68" cy="68" r="7" fill="currentColor"/>
+      </svg>
+    </button>
+  </header>
 
   <section class="dice-tray" id="dice-tray" aria-live="polite"></section>
 
   <button class="roll-btn" id="roll-btn">Roll</button>
+
+  <aside class="settings-panel" id="settings-panel" aria-hidden="true">
+    <section class="settings-section">
+      <span class="control-label">Number of Dice</span>
+      <div class="count-stepper" role="group" aria-label="Number of dice">
+        <button class="count-btn" id="count-down" aria-label="Fewer dice">&minus;</button>
+        <span class="count-value" id="count-value">2</span>
+        <button class="count-btn" id="count-up" aria-label="More dice">&plus;</button>
+      </div>
+    </section>
+
+    <section class="settings-section">
+      <span class="control-label">Color</span>
+      <div class="swatches-panel" id="swatches-panel"></div>
+    </section>
+  </aside>
 </main>
 
 <script src="app.js"></script>

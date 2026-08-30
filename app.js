@@ -20,6 +20,8 @@ const PIP_LAYOUTS = {
 };
 
 let dice = [];
+let selectedIndex = 0;
+let settingsOpen = false;
 
 function randomFace() {
   return 1 + Math.floor(Math.random() * 6);
@@ -38,10 +40,13 @@ function setDiceCount(count) {
   } else {
     dice.length = count;
   }
+  if (selectedIndex > count - 1) selectedIndex = count - 1;
+
   document.getElementById("count-value").textContent = String(count);
   document.getElementById("count-down").disabled = count <= MIN_DICE;
   document.getElementById("count-up").disabled = count >= MAX_DICE;
   renderTray();
+  renderSwatchesPanel();
 }
 
 function pipSvg(value, colorIndex) {
@@ -56,22 +61,23 @@ function pipSvg(value, colorIndex) {
     </svg>`;
 }
 
-function swatchRow(die, index) {
-  return PALETTE.map((c, i) => `
-    <button class="swatch${i === die.colorIndex ? " selected" : ""}"
-      style="background:${c.hex}"
-      data-die-index="${index}" data-color-index="${i}"
-      aria-label="${c.name}"></button>
-  `).join("");
-}
-
 function renderTray() {
   const tray = document.getElementById("dice-tray");
   tray.innerHTML = dice.map((die, index) => `
-    <div class="die" data-index="${index}">
+    <div class="die${index === selectedIndex ? " selected" : ""}" data-index="${index}">
       <div class="die-face-wrap">${pipSvg(die.value, die.colorIndex)}</div>
-      <div class="swatches">${swatchRow(die, index)}</div>
     </div>
+  `).join("");
+}
+
+function renderSwatchesPanel() {
+  const panel = document.getElementById("swatches-panel");
+  const selectedDie = dice[selectedIndex];
+  panel.innerHTML = PALETTE.map((c, i) => `
+    <button class="swatch${selectedDie && i === selectedDie.colorIndex ? " selected" : ""}"
+      style="background:${c.hex}"
+      data-color-index="${i}"
+      aria-label="${c.name}"></button>
   `).join("");
 }
 
@@ -95,17 +101,33 @@ function rollAll() {
   }, durationMs);
 }
 
+function setSettingsOpen(open) {
+  settingsOpen = open;
+  document.getElementById("app").classList.toggle("settings-open", open);
+  document.getElementById("settings-panel").classList.toggle("open", open);
+  document.getElementById("settings-panel").setAttribute("aria-hidden", String(!open));
+  document.getElementById("settings-toggle").setAttribute("aria-expanded", String(open));
+}
+
+document.getElementById("settings-toggle").addEventListener("click", () => setSettingsOpen(!settingsOpen));
 document.getElementById("count-up").addEventListener("click", () => setDiceCount(dice.length + 1));
 document.getElementById("count-down").addEventListener("click", () => setDiceCount(dice.length - 1));
 document.getElementById("roll-btn").addEventListener("click", rollAll);
 
 document.getElementById("dice-tray").addEventListener("click", (e) => {
+  const die = e.target.closest(".die");
+  if (!die) return;
+  selectedIndex = Number(die.dataset.index);
+  renderTray();
+  renderSwatchesPanel();
+});
+
+document.getElementById("swatches-panel").addEventListener("click", (e) => {
   const swatch = e.target.closest(".swatch");
   if (!swatch) return;
-  const dieIndex = Number(swatch.dataset.dieIndex);
-  const colorIndex = Number(swatch.dataset.colorIndex);
-  dice[dieIndex].colorIndex = colorIndex;
+  dice[selectedIndex].colorIndex = Number(swatch.dataset.colorIndex);
   renderTray();
+  renderSwatchesPanel();
 });
 
 setDiceCount(2);
