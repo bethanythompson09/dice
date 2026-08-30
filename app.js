@@ -28,7 +28,7 @@ const CUSTOM_SETS = [
 const LOST_CITIES_SYMBOLS = {
   1: { color: "#006cbf", shape: (c) => `<rect x="26" y="42" width="48" height="16" rx="4" fill="${c}"/><rect x="42" y="26" width="16" height="48" rx="4" fill="${c}"/>` },
   2: { color: "#3ea300", shape: (c) => `<path d="M50,22 L78,74 L22,74 Z" fill="${c}"/>` },
-  3: { color: "#f5a524", shape: (c) => `<circle cx="50" cy="50" r="27" fill="${c}"/>` },
+  3: { color: "#ff6a00", shape: (c) => `<circle cx="50" cy="50" r="27" fill="${c}"/>` },
   4: { color: "#fed400", shape: (c) => `<rect x="25" y="25" width="50" height="50" rx="4" fill="${c}"/>` },
   5: { color: "#6C2A93", shape: (c) => `<path d="M50,18 L79,68 L21,68 Z M50,82 L21,32 L79,32 Z" fill="${c}"/>` },
   6: { color: "#ff3737", shape: (c) => `<path d="M50,78 C20,55 8,35 22,22 C32,12 46,16 50,28 C54,16 68,12 78,22 C92,35 80,55 50,78 Z" fill="${c}"/>` },
