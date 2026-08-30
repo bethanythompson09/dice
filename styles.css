@@ -213,6 +213,11 @@ html, body {
   border-color: var(--text);
 }
 
+.swatch:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 .custom-options {
   display: flex;
   gap: 12px;

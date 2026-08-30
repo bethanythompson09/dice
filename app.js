@@ -97,16 +97,14 @@ function renderTray() {
 
 function renderSwatchesPanel() {
   const panel = document.getElementById("swatches-panel");
-  if (activeCustomSet) {
-    panel.innerHTML = "";
-    return;
-  }
+  const customActive = activeCustomSet !== null;
   const selectedDie = dice[selectedIndex];
   panel.innerHTML = PALETTE.map((c, i) => `
-    <button class="swatch${selectedDie && i === selectedDie.colorIndex ? " selected" : ""}"
+    <button class="swatch${!customActive && selectedDie && i === selectedDie.colorIndex ? " selected" : ""}"
       style="background:${c.hex}"
       data-color-index="${i}"
-      aria-label="${c.name}"></button>
+      aria-label="${c.name}"
+      ${customActive ? "disabled" : ""}></button>
   `).join("");
 }
 
