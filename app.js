@@ -201,7 +201,7 @@ function layoutDice() {
 function renderTray() {
   const tray = document.getElementById("dice-tray");
   tray.innerHTML = dice.map((die, index) => `
-    <div class="die${settingsOpen && !activeCustomSet && index === selectedIndex ? " selected" : ""}" data-index="${index}">
+    <div class="die${settingsOpen && !activeCustomSet && index === selectedIndex ? " selected" : ""}${die.tapSelected ? " tap-selected" : ""}" data-index="${index}">
       <div class="die-face-wrap${rotationClassFor(die)}">${faceSvgFor(die)}</div>
     </div>
   `).join("");
@@ -338,10 +338,25 @@ document.getElementById("count-up").addEventListener("click", () => setDiceCount
 document.getElementById("count-down").addEventListener("click", () => setDiceCount(dice.length - 1));
 document.getElementById("roll-btn").addEventListener("click", rollAll);
 
+function toggleLostCitiesTapSelection(index) {
+  const tapped = dice[index];
+  const group = tapped.dieIndexInSet < 3 ? "d10" : "symbol";
+  const wasSelected = tapped.tapSelected;
+  dice.forEach((d) => {
+    const dGroup = d.dieIndexInSet < 3 ? "d10" : "symbol";
+    if (dGroup === group) d.tapSelected = false;
+  });
+  tapped.tapSelected = !wasSelected;
+}
+
 document.getElementById("dice-tray").addEventListener("click", (e) => {
   const die = e.target.closest(".die");
   if (!die) return;
-  selectedIndex = Number(die.dataset.index);
+  const index = Number(die.dataset.index);
+  selectedIndex = index;
+  if (!settingsOpen && activeCustomSet === "lost-cities") {
+    toggleLostCitiesTapSelection(index);
+  }
   renderTray();
   renderSwatchesPanel();
 });

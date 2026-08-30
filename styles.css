@@ -148,6 +148,7 @@ html, body {
 }
 
 .die-face-wrap {
+  position: relative;
   width: 100%;
   height: 100%;
   padding: calc(var(--die-size) * 0.0476);
@@ -159,6 +160,15 @@ html, body {
 
 .die.selected .die-face-wrap {
   box-shadow: 0 0 0 3px var(--accent);
+}
+
+.die.tap-selected .die-face-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(60, 60, 60, 0.55);
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .die-face-wrap.rotate-cw {
