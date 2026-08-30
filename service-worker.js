@@ -1,4 +1,4 @@
-const CACHE_NAME = "dice-roller-v3";
+const CACHE_NAME = "dice-roller-v4";
 const ASSETS = [
   "./",
   "./index.html",

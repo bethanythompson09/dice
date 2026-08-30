@@ -173,9 +173,12 @@ html, body {
   grid-template-rows: 1fr;
 }
 
-.settings-panel-inner {
+.settings-panel-clip {
   overflow: hidden;
   min-height: 0;
+}
+
+.settings-panel-inner {
   display: flex;
   flex-direction: column;
   gap: 24px;
