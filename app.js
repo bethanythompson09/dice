@@ -116,7 +116,7 @@ function faceSvgFor(die) {
 function renderTray() {
   const tray = document.getElementById("dice-tray");
   tray.innerHTML = dice.map((die, index) => `
-    <div class="die${settingsOpen && index === selectedIndex ? " selected" : ""}" data-index="${index}">
+    <div class="die${settingsOpen && !activeCustomSet && index === selectedIndex ? " selected" : ""}" data-index="${index}">
       <div class="die-face-wrap${rotationClassFor(die)}">${faceSvgFor(die)}</div>
     </div>
   `).join("");
@@ -130,8 +130,7 @@ function renderSwatchesPanel() {
     <button class="swatch${!customActive && selectedDie && i === selectedDie.colorIndex ? " selected" : ""}"
       style="background:${c.hex}"
       data-color-index="${i}"
-      aria-label="${c.name}"
-      ${customActive ? "disabled" : ""}></button>
+      aria-label="${c.name}"></button>
   `).join("");
 }
 
@@ -213,9 +212,18 @@ document.getElementById("dice-tray").addEventListener("click", (e) => {
 document.getElementById("swatches-panel").addEventListener("click", (e) => {
   const swatch = e.target.closest(".swatch");
   if (!swatch) return;
-  dice[selectedIndex].colorIndex = Number(swatch.dataset.colorIndex);
+  const colorIndex = Number(swatch.dataset.colorIndex);
+  if (activeCustomSet) {
+    activeCustomSet = null;
+    dice = [createDie(colorIndex)];
+    selectedIndex = 0;
+    renderCustomSection();
+  } else {
+    dice[selectedIndex].colorIndex = colorIndex;
+  }
   renderTray();
   renderSwatchesPanel();
+  refreshCountControls();
 });
 
 document.getElementById("custom-options").addEventListener("click", (e) => {
