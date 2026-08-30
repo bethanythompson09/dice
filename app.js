@@ -116,7 +116,7 @@ function faceSvgFor(die) {
 function renderTray() {
   const tray = document.getElementById("dice-tray");
   tray.innerHTML = dice.map((die, index) => `
-    <div class="die${index === selectedIndex ? " selected" : ""}" data-index="${index}">
+    <div class="die${settingsOpen && index === selectedIndex ? " selected" : ""}" data-index="${index}">
       <div class="die-face-wrap${rotationClassFor(die)}">${faceSvgFor(die)}</div>
     </div>
   `).join("");
@@ -194,6 +194,7 @@ function setSettingsOpen(open) {
   document.getElementById("settings-panel").classList.toggle("open", open);
   document.getElementById("settings-panel").setAttribute("aria-hidden", String(!open));
   document.getElementById("settings-toggle").setAttribute("aria-expanded", String(open));
+  renderTray();
 }
 
 document.getElementById("settings-toggle").addEventListener("click", () => setSettingsOpen(!settingsOpen));
