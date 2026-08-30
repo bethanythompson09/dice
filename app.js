@@ -23,6 +23,8 @@ const PIP_LAYOUTS = {
 const CUSTOM_SETS = [
   { id: "my-city", name: "My City", diceCount: 3 },
   { id: "lost-cities", name: "Lost Cities", diceCount: 6 },
+  { id: "extra", name: "Extra", diceCount: 5, colors: [0, 0, 0, 0, 0] },
+  { id: "quixx", name: "Quixx", diceCount: 6, colors: [0, 0, 2, 3, 4, 5] },
 ];
 
 const LOST_CITIES_SYMBOLS = {
@@ -66,6 +68,7 @@ let settingsOpen = false;
 let activeCustomSet = null;
 let savedStandardDice = null;
 let savedStandardSelectedIndex = 0;
+let savedDiceSides = 6;
 let diceSides = 6;
 
 function randomFace(sides = diceSides) {
@@ -256,24 +259,32 @@ function toggleCustomSet(setId) {
     activeCustomSet = null;
     dice = savedStandardDice;
     selectedIndex = Math.min(savedStandardSelectedIndex, dice.length - 1);
+    diceSides = savedDiceSides;
   } else {
     const set = CUSTOM_SETS.find((s) => s.id === setId);
     if (activeCustomSet === null) {
       savedStandardDice = dice;
       savedStandardSelectedIndex = selectedIndex;
+      savedDiceSides = diceSides;
     }
     activeCustomSet = setId;
-    dice = Array.from({ length: set.diceCount }, (_, i) => ({
-      custom: true,
-      setId,
-      dieIndexInSet: i,
-      value: randomFace(customDieSides(setId, i)),
-    }));
+    if (set.colors) {
+      diceSides = 6;
+      dice = set.colors.map((colorIndex) => createDie(colorIndex));
+    } else {
+      dice = Array.from({ length: set.diceCount }, (_, i) => ({
+        custom: true,
+        setId,
+        dieIndexInSet: i,
+        value: randomFace(customDieSides(setId, i)),
+      }));
+    }
     selectedIndex = 0;
   }
   renderTray();
   renderSwatchesPanel();
   renderCustomSection();
+  renderTypeSection();
   refreshCountControls();
   layoutDice();
 }
