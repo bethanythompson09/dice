@@ -116,20 +116,18 @@ function faceSvgFor(die) {
 
 function layoutDice() {
   const tray = document.getElementById("dice-tray");
-  const drawer = document.getElementById("settings-panel");
   const count = dice.length;
-  const cols = count >= 2 ? 2 : 1;
+  const maxCols = settingsOpen ? 4 : 2;
+  const cols = Math.max(1, Math.min(count, maxCols));
   const rows = Math.ceil(count / cols);
   const gap = 14;
 
-  // Measured as if the settings drawer were closed, so dice never resize
-  // just because the drawer happens to be open at the moment.
   const availableWidth = tray.clientWidth;
-  const availableHeight = tray.clientHeight + drawer.getBoundingClientRect().height;
+  const availableHeight = tray.clientHeight;
 
   const sizeFromWidth = (availableWidth - (cols - 1) * gap) / cols;
   const sizeFromHeight = (availableHeight - (rows - 1) * gap) / rows;
-  const size = Math.max(56, Math.min(240, Math.floor(Math.min(sizeFromWidth, sizeFromHeight))));
+  const size = Math.max(40, Math.min(240, Math.floor(Math.min(sizeFromWidth, sizeFromHeight))));
 
   document.documentElement.style.setProperty("--die-size", `${size}px`);
   tray.style.gap = `${gap}px`;
@@ -216,10 +214,24 @@ function setSettingsOpen(open) {
   document.getElementById("settings-panel").classList.toggle("open", open);
   document.getElementById("settings-panel").setAttribute("aria-hidden", String(!open));
   document.getElementById("settings-toggle").setAttribute("aria-expanded", String(open));
+  document.getElementById("roll-btn").style.display = open ? "none" : "";
   renderTray();
+  layoutDice();
 }
 
 document.getElementById("settings-toggle").addEventListener("click", () => setSettingsOpen(!settingsOpen));
+
+document.getElementById("settings-panel").addEventListener("transitionend", (e) => {
+  if (e.propertyName === "grid-template-rows") layoutDice();
+});
+
+document.addEventListener("click", (e) => {
+  if (!settingsOpen) return;
+  if (e.target.closest("#settings-panel")) return;
+  if (e.target.closest("#settings-toggle")) return;
+  if (e.target.closest(".die")) return;
+  setSettingsOpen(false);
+}, true);
 document.getElementById("count-up").addEventListener("click", () => setDiceCount(dice.length + 1));
 document.getElementById("count-down").addEventListener("click", () => setDiceCount(dice.length - 1));
 document.getElementById("roll-btn").addEventListener("click", rollAll);
