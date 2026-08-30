@@ -20,9 +20,16 @@ const PIP_LAYOUTS = {
   6: [[28, 25], [72, 25], [28, 50], [72, 50], [28, 75], [72, 75]],
 };
 
+const CUSTOM_SETS = [
+  { id: "my-city", name: "My City", diceCount: 3 },
+];
+
 let dice = [];
 let selectedIndex = 0;
 let settingsOpen = false;
+let activeCustomSet = null;
+let savedStandardDice = null;
+let savedStandardSelectedIndex = 0;
 
 function randomFace() {
   return 1 + Math.floor(Math.random() * 6);
@@ -43,11 +50,16 @@ function setDiceCount(count) {
   }
   if (selectedIndex > count - 1) selectedIndex = count - 1;
 
-  document.getElementById("count-value").textContent = String(count);
-  document.getElementById("count-down").disabled = count <= MIN_DICE;
-  document.getElementById("count-up").disabled = count >= MAX_DICE;
   renderTray();
   renderSwatchesPanel();
+  refreshCountControls();
+}
+
+function refreshCountControls() {
+  const customActive = activeCustomSet !== null;
+  document.getElementById("count-value").textContent = String(dice.length);
+  document.getElementById("count-down").disabled = customActive || dice.length <= MIN_DICE;
+  document.getElementById("count-up").disabled = customActive || dice.length >= MAX_DICE;
 }
 
 function pipSvg(value, colorIndex) {
@@ -62,17 +74,33 @@ function pipSvg(value, colorIndex) {
     </svg>`;
 }
 
+function customPlaceholderSvg() {
+  return `
+    <svg class="die-face" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="92" height="92" rx="18" fill="#4a4a4a" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-dasharray="7 6"/>
+      <text x="50" y="64" text-anchor="middle" font-size="42" font-family="sans-serif" fill="rgba(255,255,255,0.4)">?</text>
+    </svg>`;
+}
+
+function faceSvgFor(die) {
+  return die.custom ? customPlaceholderSvg() : pipSvg(die.value, die.colorIndex);
+}
+
 function renderTray() {
   const tray = document.getElementById("dice-tray");
   tray.innerHTML = dice.map((die, index) => `
     <div class="die${index === selectedIndex ? " selected" : ""}" data-index="${index}">
-      <div class="die-face-wrap">${pipSvg(die.value, die.colorIndex)}</div>
+      <div class="die-face-wrap">${faceSvgFor(die)}</div>
     </div>
   `).join("");
 }
 
 function renderSwatchesPanel() {
   const panel = document.getElementById("swatches-panel");
+  if (activeCustomSet) {
+    panel.innerHTML = "";
+    return;
+  }
   const selectedDie = dice[selectedIndex];
   panel.innerHTML = PALETTE.map((c, i) => `
     <button class="swatch${selectedDie && i === selectedDie.colorIndex ? " selected" : ""}"
@@ -80,6 +108,35 @@ function renderSwatchesPanel() {
       data-color-index="${i}"
       aria-label="${c.name}"></button>
   `).join("");
+}
+
+function renderCustomSection() {
+  const container = document.getElementById("custom-options");
+  container.innerHTML = CUSTOM_SETS.map((set) => `
+    <button class="custom-btn${activeCustomSet === set.id ? " selected" : ""}"
+      data-set-id="${set.id}">${set.name}</button>
+  `).join("");
+}
+
+function toggleCustomSet(setId) {
+  if (activeCustomSet === setId) {
+    activeCustomSet = null;
+    dice = savedStandardDice;
+    selectedIndex = Math.min(savedStandardSelectedIndex, dice.length - 1);
+  } else {
+    const set = CUSTOM_SETS.find((s) => s.id === setId);
+    if (activeCustomSet === null) {
+      savedStandardDice = dice;
+      savedStandardSelectedIndex = selectedIndex;
+    }
+    activeCustomSet = setId;
+    dice = Array.from({ length: set.diceCount }, () => ({ custom: true, setId }));
+    selectedIndex = 0;
+  }
+  renderTray();
+  renderSwatchesPanel();
+  renderCustomSection();
+  refreshCountControls();
 }
 
 function rollAll() {
@@ -91,7 +148,7 @@ function rollAll() {
   const flickerInterval = setInterval(() => {
     dice.forEach((die) => { die.value = randomFace(); });
     dieEls.forEach((el, i) => {
-      el.querySelector(".die-face-wrap").innerHTML = pipSvg(dice[i].value, dice[i].colorIndex);
+      el.querySelector(".die-face-wrap").innerHTML = faceSvgFor(dice[i]);
     });
   }, flickerMs);
 
@@ -130,6 +187,13 @@ document.getElementById("swatches-panel").addEventListener("click", (e) => {
   renderSwatchesPanel();
 });
 
+document.getElementById("custom-options").addEventListener("click", (e) => {
+  const btn = e.target.closest(".custom-btn");
+  if (!btn) return;
+  toggleCustomSet(btn.dataset.setId);
+});
+
+renderCustomSection();
 setDiceCount(2);
 
 if ("serviceWorker" in navigator) {
