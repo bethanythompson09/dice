@@ -132,8 +132,6 @@ function layoutDice() {
   const size = Math.max(56, Math.min(240, Math.floor(Math.min(sizeFromWidth, sizeFromHeight))));
 
   document.documentElement.style.setProperty("--die-size", `${size}px`);
-  tray.style.gridTemplateColumns = `repeat(${cols}, ${size}px)`;
-  tray.style.gridAutoRows = `${size}px`;
   tray.style.gap = `${gap}px`;
 }
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = "dice-roller-v15";
+const CACHE_NAME = "dice-roller-v16";
 const CITY_FACE_ASSETS = [1, 2, 3].flatMap((die) =>
   [1, 2, 3, 4, 5, 6].map((face) => `./icons/custom/my-city/${die}-${face}.png`)
 );
