@@ -22,7 +22,17 @@ const PIP_LAYOUTS = {
 
 const CUSTOM_SETS = [
   { id: "my-city", name: "My City", diceCount: 3 },
+  { id: "lost-cities", name: "Lost Cities", diceCount: 6 },
 ];
+
+const LOST_CITIES_SYMBOLS = {
+  1: { color: "#006cbf", shape: (c) => `<rect x="26" y="42" width="48" height="16" rx="4" fill="${c}"/><rect x="42" y="26" width="16" height="48" rx="4" fill="${c}"/>` },
+  2: { color: "#3ea300", shape: (c) => `<path d="M50,22 L78,74 L22,74 Z" fill="${c}"/>` },
+  3: { color: "#f5a524", shape: (c) => `<circle cx="50" cy="50" r="27" fill="${c}"/>` },
+  4: { color: "#fed400", shape: (c) => `<rect x="25" y="25" width="50" height="50" rx="4" fill="${c}"/>` },
+  5: { color: "#6C2A93", shape: (c) => `<path d="M50,18 L79,68 L21,68 Z M50,82 L21,32 L79,32 Z" fill="${c}"/>` },
+  6: { color: "#ff3737", shape: (c) => `<path d="M50,78 C20,55 8,35 22,22 C32,12 46,16 50,28 C54,16 68,12 78,22 C92,35 80,55 50,78 Z" fill="${c}"/>` },
+};
 
 const DIE_TYPES = [
   { sides: 6, name: "D6" },
@@ -64,6 +74,15 @@ function randomFace(sides = diceSides) {
 
 function createDie(colorIndex) {
   return { value: randomFace(), colorIndex };
+}
+
+function customDieSides(setId, dieIndexInSet) {
+  if (setId === "lost-cities") return dieIndexInSet < 3 ? 10 : 6;
+  return 6;
+}
+
+function sidesForDie(die) {
+  return die.custom ? customDieSides(die.setId, die.dieIndexInSet) : diceSides;
 }
 
 function setDiceCount(count) {
@@ -110,8 +129,28 @@ function customPlaceholderSvg() {
     </svg>`;
 }
 
+function whiteNumeralSvg(value) {
+  return `
+    <svg class="die-face" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="92" height="92" rx="18" fill="#f5f5f5" stroke="rgba(0,0,0,0.15)" stroke-width="2"/>
+      <text x="50" y="66" text-anchor="middle" font-size="46" font-weight="700" font-family="sans-serif" fill="#1a1a1a">${value}</text>
+    </svg>`;
+}
+
+function symbolDieSvg(value) {
+  const symbol = LOST_CITIES_SYMBOLS[value];
+  return `
+    <svg class="die-face" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="92" height="92" rx="18" fill="#f5f5f5" stroke="rgba(0,0,0,0.15)" stroke-width="2"/>
+      ${symbol.shape(symbol.color)}
+    </svg>`;
+}
+
 function faceSvgFor(die) {
   if (die.custom) {
+    if (die.setId === "lost-cities") {
+      return die.dieIndexInSet < 3 ? whiteNumeralSvg(die.value) : symbolDieSvg(die.value);
+    }
     const dieFaces = CUSTOM_FACES[die.setId] && CUSTOM_FACES[die.setId][die.dieIndexInSet];
     return dieFaces
       ? `<img class="die-face" src="${dieFaces[die.value - 1]}" alt="" draggable="false">`
@@ -224,7 +263,7 @@ function toggleCustomSet(setId) {
       custom: true,
       setId,
       dieIndexInSet: i,
-      value: randomFace(),
+      value: randomFace(customDieSides(setId, i)),
     }));
     selectedIndex = 0;
   }
@@ -242,7 +281,7 @@ function rollAll() {
   const flickerMs = 110;
   const durationMs = 1000;
   const flickerInterval = setInterval(() => {
-    dice.forEach((die) => { die.value = randomFace(); });
+    dice.forEach((die) => { die.value = randomFace(sidesForDie(die)); });
     dieEls.forEach((el, i) => {
       el.querySelector(".die-face-wrap").innerHTML = faceSvgFor(dice[i]);
     });
@@ -250,7 +289,7 @@ function rollAll() {
 
   setTimeout(() => {
     clearInterval(flickerInterval);
-    dice.forEach((die) => { die.value = randomFace(); });
+    dice.forEach((die) => { die.value = randomFace(sidesForDie(die)); });
     renderTray();
   }, durationMs);
 }
