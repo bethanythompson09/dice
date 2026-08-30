@@ -220,11 +220,10 @@ function renderSwatchesPanel() {
 }
 
 function renderCustomSection() {
-  const container = document.getElementById("custom-options");
-  container.innerHTML = CUSTOM_SETS.map((set) => `
-    <button class="custom-btn${activeCustomSet === set.id ? " selected" : ""}"
-      data-set-id="${set.id}">${set.name}</button>
-  `).join("");
+  const select = document.getElementById("preset-select");
+  select.innerHTML = `<option value="">None</option>` +
+    CUSTOM_SETS.map((set) => `<option value="${set.id}">${set.name}</option>`).join("");
+  select.value = activeCustomSet || "";
 }
 
 function renderTypeSection() {
@@ -379,10 +378,13 @@ document.getElementById("swatches-panel").addEventListener("click", (e) => {
   layoutDice();
 });
 
-document.getElementById("custom-options").addEventListener("click", (e) => {
-  const btn = e.target.closest(".custom-btn");
-  if (!btn) return;
-  toggleCustomSet(btn.dataset.setId);
+document.getElementById("preset-select").addEventListener("change", (e) => {
+  const value = e.target.value;
+  if (value) {
+    toggleCustomSet(value);
+  } else if (activeCustomSet) {
+    toggleCustomSet(activeCustomSet);
+  }
 });
 
 document.getElementById("type-options").addEventListener("click", (e) => {

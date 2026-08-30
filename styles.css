@@ -269,6 +269,25 @@ img.die-face {
   flex-wrap: wrap;
 }
 
+.preset-select {
+  width: 100%;
+  max-width: 260px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.preset-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .custom-btn {
   padding: 10px 18px;
   border-radius: 999px;
