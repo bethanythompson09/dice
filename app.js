@@ -24,6 +24,11 @@ const CUSTOM_SETS = [
   { id: "my-city", name: "My City", diceCount: 3 },
 ];
 
+const DIE_TYPES = [
+  { sides: 6, name: "D6" },
+  { sides: 10, name: "D10" },
+];
+
 function cityFacePaths(dieNum) {
   return [1, 2, 3, 4, 5, 6].map((face) => `icons/custom/my-city/${dieNum}-${face}.png`);
 }
@@ -51,9 +56,10 @@ let settingsOpen = false;
 let activeCustomSet = null;
 let savedStandardDice = null;
 let savedStandardSelectedIndex = 0;
+let diceSides = 6;
 
-function randomFace() {
-  return 1 + Math.floor(Math.random() * 6);
+function randomFace(sides = diceSides) {
+  return 1 + Math.floor(Math.random() * sides);
 }
 
 function createDie(colorIndex) {
@@ -86,13 +92,13 @@ function refreshCountControls() {
 
 function pipSvg(value, colorIndex) {
   const color = PALETTE[colorIndex];
-  const pips = PIP_LAYOUTS[value]
-    .map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7" fill="${color.pip}"/>`)
-    .join("");
+  const face = diceSides === 6
+    ? PIP_LAYOUTS[value].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7" fill="${color.pip}"/>`).join("")
+    : `<text x="50" y="66" text-anchor="middle" font-size="46" font-weight="700" font-family="sans-serif" fill="${color.pip}">${value}</text>`;
   return `
     <svg class="die-face" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <rect x="4" y="4" width="92" height="92" rx="18" fill="${color.hex}" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
-      ${pips}
+      ${face}
     </svg>`;
 }
 
@@ -171,6 +177,35 @@ function renderCustomSection() {
     <button class="custom-btn${activeCustomSet === set.id ? " selected" : ""}"
       data-set-id="${set.id}">${set.name}</button>
   `).join("");
+}
+
+function renderTypeSection() {
+  const container = document.getElementById("type-options");
+  container.innerHTML = DIE_TYPES.map((t) => `
+    <button class="custom-btn${diceSides === t.sides ? " selected" : ""}"
+      data-sides="${t.sides}">${t.name}</button>
+  `).join("");
+}
+
+function exitCustomSet(colorIndex) {
+  activeCustomSet = null;
+  dice = [createDie(colorIndex)];
+  selectedIndex = 0;
+  renderCustomSection();
+}
+
+function setDiceSides(sides) {
+  diceSides = sides;
+  if (activeCustomSet) {
+    exitCustomSet(0);
+  } else {
+    dice.forEach((die) => { die.value = randomFace(); });
+  }
+  renderTray();
+  renderSwatchesPanel();
+  renderTypeSection();
+  refreshCountControls();
+  layoutDice();
 }
 
 function toggleCustomSet(setId) {
@@ -260,10 +295,7 @@ document.getElementById("swatches-panel").addEventListener("click", (e) => {
   if (!swatch) return;
   const colorIndex = Number(swatch.dataset.colorIndex);
   if (activeCustomSet) {
-    activeCustomSet = null;
-    dice = [createDie(colorIndex)];
-    selectedIndex = 0;
-    renderCustomSection();
+    exitCustomSet(colorIndex);
   } else {
     dice[selectedIndex].colorIndex = colorIndex;
   }
@@ -279,6 +311,12 @@ document.getElementById("custom-options").addEventListener("click", (e) => {
   toggleCustomSet(btn.dataset.setId);
 });
 
+document.getElementById("type-options").addEventListener("click", (e) => {
+  const btn = e.target.closest(".custom-btn");
+  if (!btn) return;
+  setDiceSides(Number(btn.dataset.sides));
+});
+
 let resizeTimer = null;
 window.addEventListener("resize", () => {
   clearTimeout(resizeTimer);
@@ -286,6 +324,7 @@ window.addEventListener("resize", () => {
 });
 
 renderCustomSection();
+renderTypeSection();
 setDiceCount(2);
 
 if ("serviceWorker" in navigator) {
