@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#121212">
+<title>Dice Roller</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon.svg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="app">
+  <h1 class="title">Dice Roller</h1>
+
+  <section class="control-row">
+    <span class="control-label">Dice</span>
+    <div class="count-stepper" role="group" aria-label="Number of dice">
+      <button class="count-btn" id="count-down" aria-label="Fewer dice">&minus;</button>
+      <span class="count-value" id="count-value">2</span>
+      <button class="count-btn" id="count-up" aria-label="More dice">&plus;</button>
+    </div>
+  </section>
+
+  <section class="dice-tray" id="dice-tray" aria-live="polite"></section>
+
+  <button class="roll-btn" id="roll-btn">Roll</button>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
