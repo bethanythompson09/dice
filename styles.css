@@ -7,6 +7,7 @@
   --accent: #5ec9c0;
   --accent-text: #0b1f1d;
   --ring: #5a5a5a;
+  --die-size: 168px;
 }
 
 * { box-sizing: border-box; }
@@ -23,7 +24,8 @@ html, body {
 }
 
 .app {
-  min-height: 100dvh;
+  height: 100dvh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -110,28 +112,26 @@ html, body {
 
 .dice-tray {
   flex: 1;
+  min-height: 0;
   width: 100%;
   max-width: 960px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  display: grid;
   justify-content: center;
-  row-gap: 8px;
-  column-gap: 18px;
+  align-content: center;
   padding: 8px 0;
 }
 
 .die {
-  width: 168px;
-  height: 168px;
+  width: var(--die-size);
+  height: var(--die-size);
   cursor: pointer;
 }
 
 .die-face-wrap {
-  width: 168px;
-  height: 168px;
-  padding: 8px;
-  border-radius: 44px;
+  width: 100%;
+  height: 100%;
+  padding: calc(var(--die-size) * 0.0476);
+  border-radius: calc(var(--die-size) * 0.262);
   perspective: 400px;
   box-shadow: 0 0 0 0 transparent;
   transition: box-shadow 0.15s ease;

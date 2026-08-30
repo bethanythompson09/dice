@@ -74,6 +74,7 @@ function setDiceCount(count) {
   renderTray();
   renderSwatchesPanel();
   refreshCountControls();
+  layoutDice();
 }
 
 function refreshCountControls() {
@@ -111,6 +112,29 @@ function faceSvgFor(die) {
       : customPlaceholderSvg();
   }
   return pipSvg(die.value, die.colorIndex);
+}
+
+function layoutDice() {
+  const tray = document.getElementById("dice-tray");
+  const drawer = document.getElementById("settings-panel");
+  const count = dice.length;
+  const cols = count >= 2 ? 2 : 1;
+  const rows = Math.ceil(count / cols);
+  const gap = 14;
+
+  // Measured as if the settings drawer were closed, so dice never resize
+  // just because the drawer happens to be open at the moment.
+  const availableWidth = tray.clientWidth;
+  const availableHeight = tray.clientHeight + drawer.getBoundingClientRect().height;
+
+  const sizeFromWidth = (availableWidth - (cols - 1) * gap) / cols;
+  const sizeFromHeight = (availableHeight - (rows - 1) * gap) / rows;
+  const size = Math.max(56, Math.min(240, Math.floor(Math.min(sizeFromWidth, sizeFromHeight))));
+
+  document.documentElement.style.setProperty("--die-size", `${size}px`);
+  tray.style.gridTemplateColumns = `repeat(${cols}, ${size}px)`;
+  tray.style.gridAutoRows = `${size}px`;
+  tray.style.gap = `${gap}px`;
 }
 
 function renderTray() {
@@ -166,6 +190,7 @@ function toggleCustomSet(setId) {
   renderSwatchesPanel();
   renderCustomSection();
   refreshCountControls();
+  layoutDice();
 }
 
 function rollAll() {
@@ -224,12 +249,19 @@ document.getElementById("swatches-panel").addEventListener("click", (e) => {
   renderTray();
   renderSwatchesPanel();
   refreshCountControls();
+  layoutDice();
 });
 
 document.getElementById("custom-options").addEventListener("click", (e) => {
   const btn = e.target.closest(".custom-btn");
   if (!btn) return;
   toggleCustomSet(btn.dataset.setId);
+});
+
+let resizeTimer = null;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(layoutDice, 100);
 });
 
 renderCustomSection();
