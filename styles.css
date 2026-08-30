@@ -140,6 +140,14 @@ html, body {
   box-shadow: 0 0 0 3px var(--accent);
 }
 
+.die-face-wrap.rotate-cw {
+  transform: rotate(90deg);
+}
+
+.die-face-wrap.rotate-ccw {
+  transform: rotate(-90deg);
+}
+
 .die-face {
   width: 100%;
   height: 100%;

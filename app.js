@@ -36,6 +36,15 @@ const CUSTOM_FACES = {
   },
 };
 
+const CUSTOM_FACE_ROTATION = {
+  "my-city": { 0: "cw", 1: "ccw" },
+};
+
+function rotationClassFor(die) {
+  const rot = die.custom && CUSTOM_FACE_ROTATION[die.setId] && CUSTOM_FACE_ROTATION[die.setId][die.dieIndexInSet];
+  return rot ? ` rotate-${rot}` : "";
+}
+
 let dice = [];
 let selectedIndex = 0;
 let settingsOpen = false;
@@ -108,7 +117,7 @@ function renderTray() {
   const tray = document.getElementById("dice-tray");
   tray.innerHTML = dice.map((die, index) => `
     <div class="die${index === selectedIndex ? " selected" : ""}" data-index="${index}">
-      <div class="die-face-wrap">${faceSvgFor(die)}</div>
+      <div class="die-face-wrap${rotationClassFor(die)}">${faceSvgFor(die)}</div>
     </div>
   `).join("");
 }
