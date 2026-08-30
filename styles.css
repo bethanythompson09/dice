@@ -116,7 +116,8 @@ html, body {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 18px;
+  row-gap: 8px;
+  column-gap: 18px;
   padding: 8px 0;
 }
 
@@ -158,7 +159,7 @@ html, body {
 
 img.die-face {
   object-fit: cover;
-  border-radius: 18%;
+  border-radius: 8%;
 }
 
 .die.rolling .die-face {
