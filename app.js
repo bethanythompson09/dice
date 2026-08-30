@@ -24,9 +24,11 @@ const PIP_LAYOUTS = {
 
 const CUSTOM_SETS = [
   { id: "extra", name: "Extra", diceCount: 5, colors: [0, 0, 0, 0, 0] },
+  { id: "knapp-daneben", name: "Knapp Daneben", diceCount: 5, colors: [2, 6, 5, 4, 8] },
   { id: "lost-cities", name: "Lost Cities", diceCount: 6 },
   { id: "my-city", name: "My City", diceCount: 3 },
   { id: "quixx", name: "Quixx", diceCount: 6, colors: [0, 0, 2, 4, 5, 6] },
+  { id: "twenty-one", name: "Twenty One", diceCount: 6, colors: [0, 1, 5, 4, 2, 6] },
 ];
 
 const LOST_CITIES_SYMBOLS = {
