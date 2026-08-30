@@ -1,12 +1,12 @@
 :root {
-  --bg: #121212;
-  --surface: #1e1e1e;
-  --surface-2: #2a2a2a;
+  --bg: #333333;
+  --surface: #3f3f3f;
+  --surface-2: #4a4a4a;
   --text: #eaeaea;
-  --text-dim: #9a9a9a;
+  --text-dim: #b0b0b0;
   --accent: #5ec9c0;
   --accent-text: #0b1f1d;
-  --ring: #3a3a3a;
+  --ring: #5a5a5a;
 }
 
 * { box-sizing: border-box; }

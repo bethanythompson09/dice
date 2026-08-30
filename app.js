@@ -7,7 +7,7 @@ const PALETTE = [
   { name: "Red",    hex: "#ff3737", pip: "#ffffff" },
   { name: "Blue",   hex: "#006cbf", pip: "#ffffff" },
   { name: "Green",  hex: "#3ea300", pip: "#ffffff" },
-  { name: "Black",  hex: "#2b2b2b", pip: "#ffffff" },
+  { name: "Black",  hex: "#000000", pip: "#ffffff" },
   { name: "White",  hex: "#f5f5f5", pip: "#1a1a1a" },
 ];
 
