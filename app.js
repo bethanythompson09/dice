@@ -24,41 +24,17 @@ const CUSTOM_SETS = [
   { id: "my-city", name: "My City", diceCount: 3 },
 ];
 
-// Each shape is a small "building" motif: a navy face, one or two white
-// "window" rects, and a gray dome perched on top of them.
-const CITY_FACE_SHAPES = {
-  A: { windows: [{ x: 50, y: 6, w: 34, h: 40 }], dome: { cx: 69, r: 15 } },
-  B: {
-    windows: [
-      { x: 50, y: 6, w: 34, h: 40 },
-      { x: 8, y: 54, w: 34, h: 34 },
-      { x: 50, y: 54, w: 34, h: 34 },
-    ],
-    dome: { cx: 69, r: 15 },
-  },
-  C: {
-    windows: [
-      { x: 50, y: 6, w: 34, h: 28 },
-      { x: 50, y: 38, w: 34, h: 54 },
-    ],
-    dome: { cx: 69, r: 15 },
-  },
-  D: {
-    windows: [
-      { x: 8, y: 6, w: 36, h: 46 },
-      { x: 52, y: 6, w: 34, h: 46 },
-    ],
-    dome: { cx: 50, r: 17 },
-  },
-};
+function cityFacePaths(dieNum) {
+  return [1, 2, 3, 4, 5, 6].map((face) => `icons/custom/my-city/${dieNum}-${face}.png`);
+}
 
 const CUSTOM_FACES = {
   "my-city": {
-    0: ["A", "B", "A", "C", "D", "D"],
+    0: cityFacePaths(1),
+    1: cityFacePaths(2),
+    2: cityFacePaths(3),
   },
 };
-
-let cityClipCounter = 0;
 
 let dice = [];
 let selectedIndex = 0;
@@ -118,26 +94,12 @@ function customPlaceholderSvg() {
     </svg>`;
 }
 
-function cityFaceSvg(shapeKey) {
-  const shape = CITY_FACE_SHAPES[shapeKey];
-  const clipId = `city-clip-${cityClipCounter++}`;
-  const windows = shape.windows
-    .map((w) => `<rect x="${w.x}" y="${w.y}" width="${w.w}" height="${w.h}" fill="#ffffff"/>`)
-    .join("");
-  const { cx, r } = shape.dome;
-  const dome = `<path d="M${cx - r} 6 A${r} ${r} 0 0 0 ${cx + r} 6 Z" fill="#6b6b6b"/>`;
-  return `
-    <svg class="die-face" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <defs><clipPath id="${clipId}"><rect x="4" y="4" width="92" height="92" rx="18"/></clipPath></defs>
-      <rect x="4" y="4" width="92" height="92" rx="18" fill="#000080" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
-      <g clip-path="url(#${clipId})">${windows}${dome}</g>
-    </svg>`;
-}
-
 function faceSvgFor(die) {
   if (die.custom) {
     const dieFaces = CUSTOM_FACES[die.setId] && CUSTOM_FACES[die.setId][die.dieIndexInSet];
-    return dieFaces ? cityFaceSvg(dieFaces[die.value - 1]) : customPlaceholderSvg();
+    return dieFaces
+      ? `<img class="die-face" src="${dieFaces[die.value - 1]}" alt="" draggable="false">`
+      : customPlaceholderSvg();
   }
   return pipSvg(die.value, die.colorIndex);
 }

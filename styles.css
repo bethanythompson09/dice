@@ -148,6 +148,11 @@ html, body {
   transform-origin: center;
 }
 
+img.die-face {
+  object-fit: cover;
+  border-radius: 18%;
+}
+
 .die.rolling .die-face {
   animation: tumble 1s ease-in-out;
 }

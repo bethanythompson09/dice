@@ -1,4 +1,7 @@
-const CACHE_NAME = "dice-roller-v9";
+const CACHE_NAME = "dice-roller-v10";
+const CITY_FACE_ASSETS = [1, 2, 3].flatMap((die) =>
+  [1, 2, 3, 4, 5, 6].map((face) => `./icons/custom/my-city/${die}-${face}.png`)
+);
 const ASSETS = [
   "./",
   "./index.html",
@@ -6,6 +9,7 @@ const ASSETS = [
   "./app.js",
   "./manifest.json",
   "./icons/icon.svg",
+  ...CITY_FACE_ASSETS,
 ];
 
 self.addEventListener("install", (event) => {
