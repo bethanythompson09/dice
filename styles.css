@@ -149,14 +149,14 @@ html, body {
 }
 
 .die.rolling .die-face {
-  animation: tumble 0.5s ease-out;
+  animation: tumble 1s ease-in-out;
 }
 
 @keyframes tumble {
   0%   { transform: rotate(0deg) scale(1); }
-  25%  { transform: rotate(-18deg) scale(1.08); }
-  50%  { transform: rotate(14deg) scale(0.94); }
-  75%  { transform: rotate(-8deg) scale(1.05); }
+  25%  { transform: rotate(-10deg) scale(1.04); }
+  50%  { transform: rotate(8deg) scale(0.97); }
+  75%  { transform: rotate(-5deg) scale(1.02); }
   100% { transform: rotate(0deg) scale(1); }
 }
 
@@ -204,6 +204,7 @@ html, body {
   height: 34px;
   border-radius: 50%;
   border: 3px solid transparent;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
   padding: 0;
   cursor: pointer;
 }

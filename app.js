@@ -2,12 +2,13 @@ const MIN_DICE = 1;
 const MAX_DICE = 6;
 
 const PALETTE = [
-  { name: "Red",    hex: "#e5484d", pip: "#ffffff" },
-  { name: "Orange", hex: "#f5a524", pip: "#1a1a1a" },
-  { name: "Yellow", hex: "#f6e05e", pip: "#1a1a1a" },
-  { name: "Green",  hex: "#46a758", pip: "#ffffff" },
-  { name: "Blue",   hex: "#3b82f6", pip: "#ffffff" },
-  { name: "Purple", hex: "#9d5bd2", pip: "#ffffff" },
+  { name: "Purple", hex: "#6C2A93", pip: "#ffffff" },
+  { name: "Yellow", hex: "#fed400", pip: "#1a1a1a" },
+  { name: "Red",    hex: "#ff3737", pip: "#ffffff" },
+  { name: "Blue",   hex: "#006cbf", pip: "#ffffff" },
+  { name: "Green",  hex: "#3ea300", pip: "#ffffff" },
+  { name: "Black",  hex: "#2b2b2b", pip: "#ffffff" },
+  { name: "White",  hex: "#f5f5f5", pip: "#1a1a1a" },
 ];
 
 const PIP_LAYOUTS = {
@@ -56,7 +57,7 @@ function pipSvg(value, colorIndex) {
     .join("");
   return `
     <svg class="die-face" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="4" width="92" height="92" rx="18" fill="${color.hex}"/>
+      <rect x="4" y="4" width="92" height="92" rx="18" fill="${color.hex}" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
       ${pips}
     </svg>`;
 }
@@ -85,8 +86,8 @@ function rollAll() {
   const dieEls = document.querySelectorAll(".die");
   dieEls.forEach((el) => el.classList.add("rolling"));
 
-  const flickerMs = 60;
-  const durationMs = 500;
+  const flickerMs = 110;
+  const durationMs = 1000;
   const flickerInterval = setInterval(() => {
     dice.forEach((die) => { die.value = randomFace(); });
     dieEls.forEach((el, i) => {
