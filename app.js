@@ -5,9 +5,11 @@ const PALETTE = [
   { name: "White",  hex: "#f5f5f5", pip: "#1a1a1a" },
   { name: "Black",  hex: "#000000", pip: "#ffffff" },
   { name: "Red",    hex: "#ff3737", pip: "#ffffff" },
+  { name: "Orange", hex: "#ff6a00", pip: "#1a1a1a" },
   { name: "Yellow", hex: "#fed400", pip: "#1a1a1a" },
   { name: "Green",  hex: "#3ea300", pip: "#ffffff" },
   { name: "Blue",   hex: "#006cbf", pip: "#ffffff" },
+  { name: "Pink",   hex: "#ff4fa3", pip: "#1a1a1a" },
   { name: "Purple", hex: "#6C2A93", pip: "#ffffff" },
 ];
 
@@ -21,10 +23,10 @@ const PIP_LAYOUTS = {
 };
 
 const CUSTOM_SETS = [
-  { id: "my-city", name: "My City", diceCount: 3 },
-  { id: "lost-cities", name: "Lost Cities", diceCount: 6 },
   { id: "extra", name: "Extra", diceCount: 5, colors: [0, 0, 0, 0, 0] },
-  { id: "quixx", name: "Quixx", diceCount: 6, colors: [0, 0, 2, 3, 4, 5] },
+  { id: "lost-cities", name: "Lost Cities", diceCount: 6 },
+  { id: "my-city", name: "My City", diceCount: 3 },
+  { id: "quixx", name: "Quixx", diceCount: 6, colors: [0, 0, 2, 4, 5, 6] },
 ];
 
 const LOST_CITIES_SYMBOLS = {
@@ -379,7 +381,7 @@ window.addEventListener("resize", () => {
 
 renderCustomSection();
 renderTypeSection();
-setDiceCount(2);
+setDiceCount(1);
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
