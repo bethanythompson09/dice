@@ -292,6 +292,9 @@ function toggleCustomSet(setId) {
 }
 
 function rollAll() {
+  dice.forEach((die) => { die.tapSelected = false; });
+  renderTray();
+
   const dieEls = document.querySelectorAll(".die");
   dieEls.forEach((el) => el.classList.add("rolling"));
 
