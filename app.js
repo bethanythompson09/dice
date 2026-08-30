@@ -173,7 +173,7 @@ function layoutDice() {
   layoutChrome();
   const tray = document.getElementById("dice-tray");
   const count = dice.length;
-  const maxCols = settingsOpen ? 4 : 2;
+  const maxCols = activeCustomSet === "lost-cities" ? 3 : (settingsOpen ? 4 : 2);
   const cols = Math.max(1, Math.min(count, maxCols));
   const rows = Math.ceil(count / cols);
   const gap = 14;
