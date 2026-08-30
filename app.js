@@ -114,7 +114,18 @@ function faceSvgFor(die) {
   return pipSvg(die.value, die.colorIndex);
 }
 
+function layoutChrome() {
+  const header = document.querySelector(".header");
+  const rollBtn = document.getElementById("roll-btn");
+  const headerHeight = header.getBoundingClientRect().height;
+  const footerVisible = getComputedStyle(rollBtn).display !== "none";
+  const footerHeight = footerVisible ? rollBtn.getBoundingClientRect().height + 16 : 12;
+  document.documentElement.style.setProperty("--header-h", `${headerHeight}px`);
+  document.documentElement.style.setProperty("--footer-h", `${footerHeight}px`);
+}
+
 function layoutDice() {
+  layoutChrome();
   const tray = document.getElementById("dice-tray");
   const count = dice.length;
   const maxCols = settingsOpen ? 4 : 2;
