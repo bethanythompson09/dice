@@ -103,7 +103,6 @@ function rollAll() {
 
 function setSettingsOpen(open) {
   settingsOpen = open;
-  document.getElementById("app").classList.toggle("settings-open", open);
   document.getElementById("settings-panel").classList.toggle("open", open);
   document.getElementById("settings-panel").setAttribute("aria-hidden", String(!open));
   document.getElementById("settings-toggle").setAttribute("aria-expanded", String(open));

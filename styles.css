@@ -7,7 +7,6 @@
   --accent: #5ec9c0;
   --accent-text: #0b1f1d;
   --ring: #3a3a3a;
-  --drawer-width: min(78vw, 280px);
 }
 
 * { box-sizing: border-box; }
@@ -24,18 +23,12 @@ html, body {
 }
 
 .app {
-  position: relative;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: max(24px, env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom));
   gap: 24px;
-  transition: padding-right 0.3s ease;
-}
-
-.app.settings-open {
-  padding-right: calc(20px + var(--drawer-width));
 }
 
 .header {
@@ -168,25 +161,27 @@ html, body {
 }
 
 .settings-panel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100dvh;
-  width: var(--drawer-width);
-  background: var(--surface);
-  box-shadow: -6px 0 16px rgba(0,0,0,0.4);
-  padding: max(24px, env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom));
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  transform: translateX(100%);
-  transition: transform 0.3s ease;
-  overflow-y: auto;
-  z-index: 20;
+  width: 100%;
+  max-width: 480px;
+  margin: -12px 0;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
 }
 
 .settings-panel.open {
-  transform: translateX(0);
+  grid-template-rows: 1fr;
+}
+
+.settings-panel-inner {
+  overflow: hidden;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 20px;
 }
 
 .settings-section {
