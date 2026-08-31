@@ -28,7 +28,6 @@ const CUSTOM_SETS = [
   { id: "lost-cities", name: "Lost Cities", diceCount: 6, group: "unique" },
   { id: "my-city", name: "My City", diceCount: 3, group: "unique" },
   { id: "quixx", name: "Quixx", diceCount: 6, colors: [0, 0, 2, 4, 5, 6], group: "d6" },
-  { id: "twenty-one", name: "Twenty One", diceCount: 6, colors: [0, 1, 5, 4, 2, 6], group: "d6" },
 ];
 
 const LOST_CITIES_SYMBOLS = {
