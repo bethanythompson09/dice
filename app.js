@@ -120,15 +120,21 @@ function numeralLabel(value, sides) {
   return sides === 10 && value === 10 ? "0" : String(value);
 }
 
+const TRIANGLE_BODY_PATH = "M57.9,25.7 L86.1,74.3 Q94,88 78.2,88 L21.8,88 Q6,88 13.9,74.3 L42.1,25.7 Q50,12 57.9,25.7 Z";
+
 function pipSvg(value, colorIndex) {
   const color = PALETTE[colorIndex];
+  const numeralY = diceSides === 4 ? 74 : 66;
   const face = diceSides === 6
     ? PIP_LAYOUTS[value].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7" fill="${color.pip}"/>`).join("")
-    : `<text x="50" y="66" text-anchor="middle" font-size="46" font-weight="700" font-family="sans-serif" fill="${color.pip}">${numeralLabel(value, diceSides)}</text>`;
-  const shapeClass = diceSides === 10 ? " decagon" : diceSides === 4 ? " triangle" : "";
+    : `<text x="50" y="${numeralY}" text-anchor="middle" font-size="46" font-weight="700" font-family="sans-serif" fill="${color.pip}">${numeralLabel(value, diceSides)}</text>`;
+  const shapeClass = diceSides === 10 ? " decagon" : "";
+  const body = diceSides === 4
+    ? `<path d="${TRIANGLE_BODY_PATH}" fill="${color.hex}" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>`
+    : `<rect x="4" y="4" width="92" height="92" rx="18" fill="${color.hex}" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>`;
   return `
     <svg class="die-face${shapeClass}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="4" width="92" height="92" rx="18" fill="${color.hex}" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+      ${body}
       ${face}
     </svg>`;
 }
