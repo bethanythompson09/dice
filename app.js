@@ -44,6 +44,7 @@ const DIE_TYPES = [
   { sides: 6, name: "D6" },
   { sides: 8, name: "D8" },
   { sides: 10, name: "D10" },
+  { sides: 12, name: "D12" },
   { sides: 20, name: "D20" },
 ];
 
@@ -130,7 +131,7 @@ function pipSvg(value, colorIndex) {
   const face = diceSides === 6
     ? PIP_LAYOUTS[value].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7" fill="${color.pip}"/>`).join("")
     : `<text x="50" y="${numeralY}" text-anchor="middle" font-size="46" font-weight="700" font-family="sans-serif" fill="${color.pip}">${numeralLabel(value, diceSides)}</text>`;
-  const shapeClass = diceSides === 10 ? " decagon" : diceSides === 8 ? " octagon" : "";
+  const shapeClass = diceSides === 10 ? " decagon" : diceSides === 8 ? " octagon" : diceSides === 12 ? " dodecagon" : "";
   const body = diceSides === 4
     ? `<path d="${TRIANGLE_BODY_PATH}" fill="${color.hex}" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>`
     : diceSides === 20
