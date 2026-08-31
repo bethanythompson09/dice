@@ -23,12 +23,12 @@ const PIP_LAYOUTS = {
 };
 
 const CUSTOM_SETS = [
-  { id: "extra", name: "Extra", diceCount: 5, colors: [0, 0, 0, 0, 0] },
-  { id: "knapp-daneben", name: "Knapp Daneben", diceCount: 5, colors: [2, 6, 5, 4, 8] },
-  { id: "lost-cities", name: "Lost Cities", diceCount: 6 },
-  { id: "my-city", name: "My City", diceCount: 3 },
-  { id: "quixx", name: "Quixx", diceCount: 6, colors: [0, 0, 2, 4, 5, 6] },
-  { id: "twenty-one", name: "Twenty One", diceCount: 6, colors: [0, 1, 5, 4, 2, 6] },
+  { id: "extra", name: "Extra", diceCount: 5, colors: [0, 0, 0, 0, 0], group: "d6" },
+  { id: "knapp-daneben", name: "Knapp Daneben", diceCount: 5, colors: [2, 6, 5, 4, 8], group: "d6" },
+  { id: "lost-cities", name: "Lost Cities", diceCount: 6, group: "unique" },
+  { id: "my-city", name: "My City", diceCount: 3, group: "unique" },
+  { id: "quixx", name: "Quixx", diceCount: 6, colors: [0, 0, 2, 4, 5, 6], group: "d6" },
+  { id: "twenty-one", name: "Twenty One", diceCount: 6, colors: [0, 1, 5, 4, 2, 6], group: "d6" },
 ];
 
 const LOST_CITIES_SYMBOLS = {
@@ -221,11 +221,17 @@ function renderSwatchesPanel() {
   `).join("");
 }
 
-function renderCustomSection() {
-  const select = document.getElementById("preset-select");
+function renderPresetSelect(id, group) {
+  const select = document.getElementById(id);
+  const sets = CUSTOM_SETS.filter((set) => set.group === group);
   select.innerHTML = `<option value="">None</option>` +
-    CUSTOM_SETS.map((set) => `<option value="${set.id}">${set.name}</option>`).join("");
-  select.value = activeCustomSet || "";
+    sets.map((set) => `<option value="${set.id}">${set.name}</option>`).join("");
+  select.value = sets.some((set) => set.id === activeCustomSet) ? activeCustomSet : "";
+}
+
+function renderCustomSection() {
+  renderPresetSelect("preset-select-unique", "unique");
+  renderPresetSelect("preset-select-d6", "d6");
 }
 
 function renderTypeSection() {
@@ -380,14 +386,17 @@ document.getElementById("swatches-panel").addEventListener("click", (e) => {
   layoutDice();
 });
 
-document.getElementById("preset-select").addEventListener("change", (e) => {
+function handlePresetSelectChange(e) {
   const value = e.target.value;
   if (value) {
     toggleCustomSet(value);
   } else if (activeCustomSet) {
     toggleCustomSet(activeCustomSet);
   }
-});
+}
+
+document.getElementById("preset-select-unique").addEventListener("change", handlePresetSelectChange);
+document.getElementById("preset-select-d6").addEventListener("change", handlePresetSelectChange);
 
 document.getElementById("type-options").addEventListener("click", (e) => {
   const btn = e.target.closest(".custom-btn");
