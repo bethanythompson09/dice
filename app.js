@@ -124,8 +124,9 @@ function pipSvg(value, colorIndex) {
   const face = diceSides === 6
     ? PIP_LAYOUTS[value].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7" fill="${color.pip}"/>`).join("")
     : `<text x="50" y="66" text-anchor="middle" font-size="46" font-weight="700" font-family="sans-serif" fill="${color.pip}">${numeralLabel(value, diceSides)}</text>`;
+  const shapeClass = diceSides === 10 ? " decagon" : "";
   return `
-    <svg class="die-face" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <svg class="die-face${shapeClass}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <rect x="4" y="4" width="92" height="92" rx="18" fill="${color.hex}" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
       ${face}
     </svg>`;
@@ -141,7 +142,7 @@ function customPlaceholderSvg() {
 
 function whiteNumeralSvg(value) {
   return `
-    <svg class="die-face" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <svg class="die-face decagon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <rect x="4" y="4" width="92" height="92" rx="18" fill="#f5f5f5" stroke="rgba(0,0,0,0.15)" stroke-width="2"/>
       <text x="50" y="66" text-anchor="middle" font-size="46" font-weight="700" font-family="sans-serif" fill="#1a1a1a">${numeralLabel(value, 10)}</text>
     </svg>`;
