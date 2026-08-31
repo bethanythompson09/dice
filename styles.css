@@ -196,6 +196,10 @@ img.die-face {
   clip-path: polygon(50% 4%, 77% 13%, 94% 36%, 94% 64%, 77% 87%, 50% 96%, 23% 87%, 6% 64%, 6% 36%, 23% 13%);
 }
 
+.die-face.octagon {
+  clip-path: polygon(67.6% 7.5%, 92.5% 32.4%, 92.5% 67.6%, 67.6% 92.5%, 32.4% 92.5%, 7.5% 67.6%, 7.5% 32.4%, 32.4% 7.5%);
+}
+
 .die.rolling .die-face {
   animation: tumble 1s ease-in-out;
 }

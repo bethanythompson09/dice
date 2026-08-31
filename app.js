@@ -42,7 +42,9 @@ const LOST_CITIES_SYMBOLS = {
 const DIE_TYPES = [
   { sides: 4, name: "D4" },
   { sides: 6, name: "D6" },
+  { sides: 8, name: "D8" },
   { sides: 10, name: "D10" },
+  { sides: 20, name: "D20" },
 ];
 
 function cityFacePaths(dieNum) {
@@ -128,9 +130,11 @@ function pipSvg(value, colorIndex) {
   const face = diceSides === 6
     ? PIP_LAYOUTS[value].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7" fill="${color.pip}"/>`).join("")
     : `<text x="50" y="${numeralY}" text-anchor="middle" font-size="46" font-weight="700" font-family="sans-serif" fill="${color.pip}">${numeralLabel(value, diceSides)}</text>`;
-  const shapeClass = diceSides === 10 ? " decagon" : "";
+  const shapeClass = diceSides === 10 ? " decagon" : diceSides === 8 ? " octagon" : "";
   const body = diceSides === 4
     ? `<path d="${TRIANGLE_BODY_PATH}" fill="${color.hex}" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>`
+    : diceSides === 20
+    ? `<circle cx="50" cy="50" r="46" fill="${color.hex}" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>`
     : `<rect x="4" y="4" width="92" height="92" rx="18" fill="${color.hex}" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>`;
   return `
     <svg class="die-face${shapeClass}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
